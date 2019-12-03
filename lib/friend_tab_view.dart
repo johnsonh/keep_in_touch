@@ -1,22 +1,60 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:keep_in_touch/friend.dart';
 
 class FriendTabView extends StatelessWidget {
-  final StreamController<String> _controller = StreamController<String>.broadcast();
+  final StreamController<Friend> _controller = StreamController<Friend>.broadcast();
 
   @override
   Widget build(BuildContext context) {
     return FriendsListView(friendStream: _controller.stream);
   }
 
-  addFriend(String friend) {
+  addFriend(Friend friend) {
     _controller.add(friend);
   }
+
+  Widget populate(Future<List<Friend>> friendsFuture) {
+    return FutureBuilder(
+      builder: (context, friendsSnapshot) {
+        if (friendsSnapshot.connectionState == ConnectionState.none &&
+            friendsSnapshot.hasData == null) {
+          return Container();
+        }
+
+        return friendsList(friendsSnapshot);
+      },
+      future: friendsFuture,
+    ); 
+  }
+
+  Widget friendsList(AsyncSnapshot<List<Friend>> friendsSnapshot) {
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: (friendsSnapshot.data == null ? 0 : friendsSnapshot.data.length),
+      itemBuilder: (context, index) {
+        Friend friend = friendsSnapshot.data[index];
+        return Container(
+            margin: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                // Text("ID: " + friend.id.toString()),
+                Text("Name: " + friend.name),
+                Text("Email: " + (friend.email == null ? "" : friend.email)),
+                Text("Phone: " + friend.phoneNumber.toString()),
+              ],
+            )
+          );
+      },
+    );
+  }
+
 }
 
 class FriendsListView extends StatefulWidget {
-  final Stream<String> friendStream;
+  final Stream<Friend> friendStream;
 
   const FriendsListView({Key key, this.friendStream}) : super(key: key);
 
@@ -25,7 +63,7 @@ class FriendsListView extends StatefulWidget {
 }
 
 class FriendsListViewState extends State<FriendsListView> {
-  final _friendsList = [];
+  final List<Friend> _friendsList = [];
   final _biggerFont = const TextStyle(fontSize: 18.0);
 
   @override
@@ -41,7 +79,7 @@ class FriendsListViewState extends State<FriendsListView> {
     return _buildFriends();
   }
 
-  _addFriend(String friend) {
+  _addFriend(Friend friend) {
     if (!mounted) return;
     setState(() {
       _friendsList.add(friend);

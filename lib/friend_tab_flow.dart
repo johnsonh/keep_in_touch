@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart'; // how to get rid of this
 
+import 'friend.dart';
 import 'nav_view.dart';
 import 'friend_tab_view.dart';
 import 'friends_context.dart';
@@ -16,8 +17,9 @@ class FriendTabFlow implements TopLevelTabView {
   @override
   AppBar getAppBar() {
     Function onTapAdd = () {
-      // friendsContext.saveFriend()
-      friendsListView.addFriend("Jessica Siefkes");
+      final friend = Friend('Greenpeace', null, null);
+      friendsContext.saveFriend(friend);
+      friendsListView.addFriend(friend);
       print("add a friend"); 
     }; // analytics could be here 
 
@@ -35,8 +37,7 @@ class FriendTabFlow implements TopLevelTabView {
 
   @override
   Widget start() {
-    var friends = friendsContext.getAllFriends(); 
-    friends.forEach((f) => friendsListView.addFriend(f.name));
+    var friendsFuture = friendsContext.getAllFriends();
 
     var bottomRightFAB = Container(
         child: FloatingActionButton.extended(
@@ -51,7 +52,7 @@ class FriendTabFlow implements TopLevelTabView {
         padding: EdgeInsets.all(25)
       );
 
-    return Stack(children: <Widget>[friendsListView, bottomRightFAB]);
+    return Stack(children: <Widget>[friendsListView.populate(friendsFuture), bottomRightFAB]);
   }
 
   @override

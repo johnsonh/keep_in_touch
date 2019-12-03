@@ -46,7 +46,7 @@ class SettingsFlow implements TopLevelTabView {
 
         return ListView.builder(
           shrinkWrap: true,
-          itemCount: resultsSnapshot.data.length,
+          itemCount: (resultsSnapshot.data == null ? 0 : resultsSnapshot.data.length),
           itemBuilder: (context, index) {
             PendingNotification notification = resultsSnapshot.data[index];
             return Container(
