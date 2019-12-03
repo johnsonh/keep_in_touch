@@ -15,31 +15,42 @@ class Tab {
 }
 
 class AppFlow {
-  final navigationManager;
-  final notificationService;
-  final friendTabFlow;
-  final getInTouchFlow;
-  final settingsFlow;
+  final NavigationManager navigationManager;
+  final NotificationService notificationService;
+  final FriendTabFlow friendTabFlow;
+  final GetInTouchFlow getInTouchFlow;
+  final SettingsFlow settingsFlow;
 
   AppFlow._(this.navigationManager, this.notificationService, this.friendTabFlow, this.getInTouchFlow, this.settingsFlow);
 
   factory AppFlow() {
     var navigationManager = NavigationManager();
     var notificationService = NotificationService(navigationManager.onSelectNotification);
-    var friendTabFlow = FriendTabFlow();
+    var friendTabFlow = FriendTabFlow(navigationManager);
     var getInTouchFlow = GetInTouchFlow();
     var settingsFlow = SettingsFlow(notificationService);
     return new AppFlow._(navigationManager, notificationService, friendTabFlow, getInTouchFlow, settingsFlow);
   }
 
   Widget start() {
+    // Map<String, WidgetBuilder> routes = <String, WidgetBuilder> {
+    //   '/friends': (BuildContext context) => friendTabFlow,
+    //   '/get_in_touch': (BuildContext context) => getInTouchFlow,
+    //   '/settings': (BuildContext context) => settingsFlow,
+    // }; 
+    navigationManager.addRoute('/friends', () => (BuildContext context) => friendTabFlow.start());
+    navigationManager.addRoute('/get_in_touch', () => (BuildContext context) => getInTouchFlow.start());
+    navigationManager.addRoute('/settings', () => (BuildContext context) => settingsFlow.start());
+
     return MaterialApp(
-        title: 'Flutter Intro App1',
+        title: 'Flutter Intro App',
         home: AppView([
-            friendTabFlow,
-            getInTouchFlow,
-            settingsFlow
-          ])
+          friendTabFlow,
+          getInTouchFlow,
+          settingsFlow
+        ]),
+        navigatorKey: navigationManager.navigatorKey,
+        routes: navigationManager.getRoutes()
       );
   }
 }

@@ -37,11 +37,12 @@ class ContactFriendView extends StatelessWidget {
   final messageOption3 = "Hey! How's life?";
   final messageOption4 = "Ahoy, how goes it";
   final messageOption5 = "How is life my dude";
+  final messageOption6 = "Hey! Sorry I never responded. How've you been?";
   
   const ContactFriendView(this.friend);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {    
     return Column(
       children: <Widget>[
         SelectableText(friend.name, style: TextStyle(fontSize: 30)),
@@ -78,6 +79,7 @@ class ContactFriendView extends StatelessWidget {
         SelectableText(messageOption3, style: TextStyle(fontSize: 18)),
         SelectableText(messageOption4, style: TextStyle(fontSize: 18)),
         SelectableText(messageOption5, style: TextStyle(fontSize: 18)),
+        SelectableText(messageOption6, style: TextStyle(fontSize: 18)),
       ],
     );
   }

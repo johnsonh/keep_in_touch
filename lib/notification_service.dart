@@ -37,7 +37,7 @@ class NotificationService {
       'New Post',
       'How to Show Notification in Flutter',
       platformChannelSpecifics,
-      payload: 'Default_Sound',
+      payload: '/get_in_touch',
     );
   }
 

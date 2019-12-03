@@ -3,10 +3,14 @@ import 'package:flutter/material.dart'; // how to get rid of this
 import 'nav_view.dart';
 import 'friend_tab_view.dart';
 import 'friend_context.dart';
+import 'navigation_manager.dart'; // URLManager we out here
 
 class FriendTabFlow implements TopLevelTabView {
-  final friendsListView = FriendTabView();
-  final friendsContext = FriendsContext();
+  final URLNavigator navigator; 
+  final FriendTabView friendsListView = FriendTabView();
+  final FriendsContext friendsContext = FriendsContext();
+
+  FriendTabFlow(this.navigator);
 
   @override
   AppBar getAppBar() {
@@ -32,19 +36,20 @@ class FriendTabFlow implements TopLevelTabView {
     var friends = friendsContext.getAllFriends(); 
     friends.forEach((f) => friendsListView.addFriend(f.name));
 
-    var bottomLeftFAB = Container(
+    var bottomRightFAB = Container(
         child: FloatingActionButton.extended(
           icon: Icon(Icons.shuffle),
           label: Text("NoOp - Press 'Get in Touch!' Below", textScaleFactor: 1.2),
           onPressed: () {
             print("Choose random friends");
+            // navigator.navigateTo('/get_in_touch');
           }
         ),
         alignment: Alignment.bottomRight,
         padding: EdgeInsets.all(25)
       );
 
-    return Stack(children: <Widget>[friendsListView, bottomLeftFAB]);
+    return Stack(children: <Widget>[friendsListView, bottomRightFAB]);
   }
 
   @override
