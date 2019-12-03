@@ -64,7 +64,7 @@ class NotificationService {
   }
 
   Future scheduleNotificationDaily() async {
-    var time = new Time(14, 15, 0);
+    var time = new Time(19, 0, 0);
     await flutterLocalNotificationsPlugin.showDailyAtTime(
         0,
         'Keep in touch with a friend!',
