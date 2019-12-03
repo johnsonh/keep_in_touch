@@ -17,8 +17,23 @@ class GetInTouchFlow implements TopLevelTabView {
 
   @override
   Widget start() {
-    var friends = friendsContext.getRandomFriends();
-    return ContactFriendView(friends[0]);
+    Future<List<Friend>> friends = friendsContext.getRandomFriends();
+    return buildFriendView(friends);
+  }
+
+  Widget buildFriendView(Future<List<Friend>> friendsFuture) {
+    return FutureBuilder(
+      builder: (context, friendsSnapshot) {
+        if (friendsSnapshot.connectionState == ConnectionState.none &&
+            friendsSnapshot.hasData == null) {
+          return Container();
+        }
+
+        if (friendsSnapshot.data == null) return Container(); 
+        return ContactFriendView(friendsSnapshot.data[0]);
+      },
+      future: friendsFuture,
+    ); 
   }
 
   Widget start2(Friend friend) {

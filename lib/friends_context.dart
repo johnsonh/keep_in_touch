@@ -150,7 +150,10 @@ class FriendsContext {
     return friends.map((f) => Friend(f.name, f.email, f.phoneNumber)).toList();
   }
 
-  List<Friend> getRandomFriends({int num = 1}) {
+  Future<List<Friend>> getRandomFriends({int num = 1}) async {
+    List<FriendModel> friendModels = await friendsClient.getFriends();
+    List<Friend> friends = friendModels.map((f) => Friend(f.name, f.email, f.phoneNumber)).toList(); 
+
     if (num >= friends.length) return friends;
     return (friends.toList()..shuffle()).take(num).toList();
   }
