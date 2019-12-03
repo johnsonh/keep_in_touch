@@ -158,9 +158,6 @@ class FriendsContext {
 
   saveFriend() async {
     final friend = FriendModel(-1, 'Fido', "", 14252466797);
-
-    // final Database db = await FriendsClient.initDB("friends.db");
-    FriendsClient friendsClient = FriendsClient();
     await friendsClient.insertFriend(friend);
     print("Saved friend");
 

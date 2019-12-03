@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class FriendTabView extends StatelessWidget {
-  final StreamController<String> _controller = StreamController<String>();
+  final StreamController<String> _controller = StreamController<String>.broadcast();
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class FriendsListViewState extends State<FriendsListView> {
   @override
   void initState() {
     super.initState();
-    this.widget.friendStream.listen((friend) {
+    this.widget.friendStream.asBroadcastStream().listen((friend) {
       _addFriend(friend);
     });
   }
@@ -42,6 +42,7 @@ class FriendsListViewState extends State<FriendsListView> {
   }
 
   _addFriend(String friend) {
+    if (!mounted) return;
     setState(() {
       _friendsList.add(friend);
     });
