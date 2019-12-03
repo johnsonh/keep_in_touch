@@ -63,7 +63,7 @@ class FriendsListView extends StatefulWidget {
 }
 
 class FriendsListViewState extends State<FriendsListView> {
-  final List<Friend> _friendsList = [];
+  final _friendsList = [];
   final _biggerFont = const TextStyle(fontSize: 18.0);
 
   @override

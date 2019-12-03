@@ -17,8 +17,8 @@ class FriendTabFlow implements TopLevelTabView {
   @override
   AppBar getAppBar() {
     Function onTapAdd = () {
-      final friend = Friend('Namibia', null, null);
-      friendsContext.saveFriend(friend);
+      final friend = Friend('Albertsons', null, null);
+      friendsContext.saveFriend(friend); // should await
       friendsListView.addFriend(friend);
       print("add a friend"); 
     }; // analytics could be here 
