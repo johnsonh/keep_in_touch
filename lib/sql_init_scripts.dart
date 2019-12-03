@@ -1,7 +1,7 @@
 
 class SQLInitScripts {
   static const String CREATE_FRIENDS_SQL = """
-    CREATE TABLE IF NOT EXISTS friends(
+    CREATE TABLE friends(
       id INTEGER PRIMARY KEY AUTOINCREMENT, 
       name TEXT NOT NULL,
       email TEXT UNIQUE, 

@@ -10,23 +10,20 @@ class FriendsClient {
   Database _database;
 
   Future<Database> get database async {
-    if (_database != null)
-    return _database;
+    // why doesnt this work?
+    if (_database != null) return _database;
 
     // if _database is null we instantiate it
-    _database = await FriendsClient.initDB("friends.db");
-    SQLInitScripts.initScript.forEach((script) async => await _database.execute(script));  
-
+    _database = await FriendsClient.initDB("friends3.db");
     return _database;
   }
 
-  // FriendsClient(this.database); 
-
   static Future<Database> initDB(String dbPathName) async {
-    return await openDatabase(
-      join(await getDatabasesPath(), dbPathName),
-      // version: SQLInitScripts.migrationScripts.length + 1,
-      version: 5,
+    var path = join(await getDatabasesPath(), dbPathName);
+
+    Database database = await openDatabase(
+      path,
+      version: SQLInitScripts.migrationScripts.length + 1,
       onCreate: (Database db, int version) async {
         SQLInitScripts.initScript.forEach((script) async => await db.execute(script));  
       },
@@ -36,6 +33,7 @@ class FriendsClient {
       //   }  
       // }
     );
+    return database; 
   }
 
   Future<void> insertFriend(FriendModel friend) async {
