@@ -10,16 +10,16 @@ class FriendTabFlow implements TopLevelTabView {
   final URLNavigator navigator; 
   final FriendsContext friendsContext;
 
-  final FriendTabView friendsListView = FriendTabView();
+  final FriendTabView friendsTabView = FriendTabView();
 
   FriendTabFlow(this.navigator, this.friendsContext);
 
   @override
   AppBar getAppBar() {
     Function onTapAdd = () {
-      final friend = Friend('Albertsons', null, null);
+      final friend = Friend('Colgate', null, null);
       friendsContext.saveFriend(friend); // should await
-      friendsListView.addFriend(friend);
+      friendsTabView.addFriend(friend);
       print("add a friend"); 
     }; // analytics could be here 
 
@@ -37,7 +37,10 @@ class FriendTabFlow implements TopLevelTabView {
 
   @override
   Widget start() {
-    var friendsFuture = friendsContext.getAllFriends();
+    friendsContext.getAllFriends()
+      .then((friends) {
+        friends.forEach((f) => friendsTabView.addFriend(f)); 
+      });
 
     var bottomRightFAB = Container(
         child: FloatingActionButton.extended(
@@ -52,7 +55,7 @@ class FriendTabFlow implements TopLevelTabView {
         padding: EdgeInsets.all(25)
       );
 
-    return Stack(children: <Widget>[friendsListView.populate(friendsFuture), bottomRightFAB]);
+    return Stack(children: <Widget>[friendsTabView, bottomRightFAB]);
   }
 
   @override
