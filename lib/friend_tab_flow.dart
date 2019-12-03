@@ -2,15 +2,16 @@ import 'package:flutter/material.dart'; // how to get rid of this
 
 import 'nav_view.dart';
 import 'friend_tab_view.dart';
-import 'friend_context.dart';
+import 'friends_context.dart';
 import 'navigation_manager.dart'; // URLManager we out here
 
 class FriendTabFlow implements TopLevelTabView {
   final URLNavigator navigator; 
-  final FriendTabView friendsListView = FriendTabView();
-  final FriendsContext friendsContext = FriendsContext();
+  final FriendsContext friendsContext;
 
-  FriendTabFlow(this.navigator);
+  final FriendTabView friendsListView = FriendTabView();
+
+  FriendTabFlow(this.navigator, this.friendsContext);
 
   @override
   AppBar getAppBar() {

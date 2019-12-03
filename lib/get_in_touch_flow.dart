@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'friend_context.dart';
-import 'friend_model.dart';
+import 'friends_context.dart';
+import 'friend.dart';
 import 'nav_view.dart'; // how to get rid of this
 
 class GetInTouchFlow implements TopLevelTabView {
-  final friendsContext = FriendsContext(); // DI
+  final FriendsContext friendsContext;
+
+  GetInTouchFlow(this.friendsContext); // DI
 
   @override
   AppBar getAppBar() {
@@ -19,7 +21,7 @@ class GetInTouchFlow implements TopLevelTabView {
     return ContactFriendView(friends[0]);
   }
 
-  Widget start2(FriendModel friend) {
+  Widget start2(Friend friend) {
     return ContactFriendView(friend);
   }
 
@@ -31,7 +33,7 @@ class GetInTouchFlow implements TopLevelTabView {
 }
 
 class ContactFriendView extends StatelessWidget {
-  final FriendModel friend;
+  final Friend friend;
   final messageOption1 = "Hey!! It's been a while, how've you been?";
   final messageOption2 = "Hello, how have you been";
   final messageOption3 = "Hey! How's life?";

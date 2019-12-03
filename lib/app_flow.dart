@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:keep_in_touch/friends_context.dart';
 
 import 'friend_tab_flow.dart';
+import 'friends_client.dart';
 import 'get_in_touch_flow.dart';
 import 'nav_view.dart';
 import 'navigation_manager.dart';
@@ -21,15 +23,23 @@ class AppFlow {
   final GetInTouchFlow getInTouchFlow;
   final SettingsFlow settingsFlow;
 
-  AppFlow._(this.navigationManager, this.notificationService, this.friendTabFlow, this.getInTouchFlow, this.settingsFlow);
+  final FriendsClient friendsClient;
+  final FriendsContext friendsContext; 
+
+  AppFlow._(this.navigationManager, this.notificationService, this.friendTabFlow, this.getInTouchFlow, this.settingsFlow, this.friendsClient, this.friendsContext);
 
   factory AppFlow() {
     var navigationManager = NavigationManager();
     var notificationService = NotificationService(navigationManager.onSelectNotification);
-    var friendTabFlow = FriendTabFlow(navigationManager);
-    var getInTouchFlow = GetInTouchFlow();
+
+    var friendsClient = FriendsClient();
+    friendsClient.database; 
+    var friendsContext = FriendsContext(friendsClient);
+
+    var friendTabFlow = FriendTabFlow(navigationManager, friendsContext);
+    var getInTouchFlow = GetInTouchFlow(friendsContext);
     var settingsFlow = SettingsFlow(notificationService);
-    return new AppFlow._(navigationManager, notificationService, friendTabFlow, getInTouchFlow, settingsFlow);
+    return new AppFlow._(navigationManager, notificationService, friendTabFlow, getInTouchFlow, settingsFlow, friendsClient, friendsContext);
   }
 
   Widget start() {
