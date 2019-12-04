@@ -28,6 +28,7 @@ class AppFlow {
 
   AppFlow._(this.navigationManager, this.notificationService, this.friendTabFlow, this.getInTouchFlow, this.settingsFlow, this.friendsClient, this.friendsContext);
 
+  // This should be replaced with DI
   factory AppFlow() {
     var navigationManager = NavigationManager();
     var notificationService = NotificationService(navigationManager.onSelectNotification);
@@ -43,14 +44,9 @@ class AppFlow {
   }
 
   Widget start() {
-    // Map<String, WidgetBuilder> routes = <String, WidgetBuilder> {
-    //   '/friends': (BuildContext context) => friendTabFlow,
-    //   '/get_in_touch': (BuildContext context) => getInTouchFlow,
-    //   '/settings': (BuildContext context) => settingsFlow,
-    // }; 
-    navigationManager.addRoute('/friends', () => (BuildContext context) => friendTabFlow.start());
-    navigationManager.addRoute('/get_in_touch', () => (BuildContext context) => getInTouchFlow.start());
-    navigationManager.addRoute('/settings', () => (BuildContext context) => settingsFlow.start());
+    navigationManager.addRoute('/friends', 0);
+    navigationManager.addRoute('/get_in_touch', 1);
+    navigationManager.addRoute('/settings', 2);
 
     return MaterialApp(
         title: 'Flutter Intro App',
@@ -58,16 +54,16 @@ class AppFlow {
           friendTabFlow,
           getInTouchFlow,
           settingsFlow
-        ]),
-        navigatorKey: navigationManager.navigatorKey,
-        routes: navigationManager.getRoutes()
+        ], navigationManager),
+        // routes: navigationManager.getRoutes(),
       );
   }
 }
 
 class AppView extends StatefulWidget {
   final List<TopLevelTabView> _tabs;
-  const AppView(this._tabs);
+  final NavigationManager navigationManager; 
+  const AppView(this._tabs, this.navigationManager);
 
   @override
   AppViewState createState() => AppViewState(_tabs[0]);
@@ -87,9 +83,9 @@ class AppViewState extends State<AppView> {
     };
 
     return Scaffold(
-          appBar: currentTab.getAppBar(),
-          body: currentTab.start(), // should be DI'd, to allow for opening from diff tabs
-          bottomNavigationBar: NavView(widget._tabs, onSwitchTabs)
-        );
+      appBar: currentTab.getAppBar(),
+      body: currentTab.start(), // should be DI'd, to allow for opening from diff tabs
+      bottomNavigationBar: NavView(widget._tabs, widget.navigationManager, onSwitchTabs),
+    );
   }
 }

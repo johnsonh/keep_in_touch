@@ -50,7 +50,7 @@ class NotificationService {
         'scheduled body',
         scheduledNotificationDateTime,
         platformChannelSpecifics,
-        payload: 'scheduled notification payload');
+        payload: '/friends');
   }
 
   Future scheduleNotificationEveryMin() async {
@@ -60,7 +60,7 @@ class NotificationService {
       'repeating body',
       RepeatInterval.EveryMinute,
       platformChannelSpecifics,
-      payload: 'every minute payload');
+      payload: '/settings');
   }
 
   Future scheduleNotificationDaily() async {

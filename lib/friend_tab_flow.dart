@@ -16,9 +16,9 @@ class FriendTabFlow implements TopLevelTabView {
 
   @override
   AppBar getAppBar() {
-    Function onTapAdd = () {
+    Function onTapAdd = () async {
       final friend = Friend('Colgate', null, null);
-      friendsContext.saveFriend(friend); // should await
+      await friendsContext.saveFriend(friend); // should await
       friendsTabView.addFriend(friend);
       print("add a friend"); 
     }; // analytics could be here 
@@ -29,7 +29,7 @@ class FriendTabFlow implements TopLevelTabView {
         IconButton(
           icon: const Icon(Icons.person_add),
           tooltip: 'Add friend',
-          onPressed: onTapAdd
+          onPressed: onTapAdd 
         )
       ]
     );
@@ -48,7 +48,7 @@ class FriendTabFlow implements TopLevelTabView {
           label: Text("NoOp - Press 'Get in Touch!' Below", textScaleFactor: 1.2),
           onPressed: () {
             print("Choose random friends");
-            // navigator.navigateTo('/get_in_touch');
+            navigator.navigateTo('/get_in_touch');
           }
         ),
         alignment: Alignment.bottomRight,

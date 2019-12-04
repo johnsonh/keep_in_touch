@@ -8,22 +8,14 @@ class NavigationManager extends URLNavigator {
   final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
 
   Future<dynamic> navigateTo(String routeName) {
-    return navigatorKey.currentState.pushNamed(routeName);
+    final BottomNavigationBar navigationBar = navigatorKey.currentWidget;
+    navigationBar.onTap(_routes[routeName]); // first section of route name
+    return null; 
   }
 
-  Map<String, WidgetBuilder> _routes = new Map();
-  // Map<String, WidgetBuilder> routes = <String, WidgetBuilder> {
-  //   '/friends': (BuildContext context) => friendTabFlow,
-  //   '/get_in_touch': (BuildContext context) => getInTouchFlow,
-  //   '/settings': (BuildContext context) => settingsFlow,
-  // }; 
-
-  addRoute(String key, Widget Function(BuildContext) Function() value) {
-    _routes.putIfAbsent(key, value);
-  }
-
-  Map<String, WidgetBuilder> getRoutes() {
-    return _routes; 
+  Map<String, int> _routes = new Map();
+  addRoute(String key, int value) {
+    _routes.putIfAbsent(key, () => value);
   }
 
   Future onSelectNotification(String payload) async {
