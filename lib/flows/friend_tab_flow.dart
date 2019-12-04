@@ -8,7 +8,12 @@ import '../views/nav_view.dart';
 class FriendTabFlow implements TopLevelFlow {
 
   factory FriendTabFlow(URLNavigator navigator, FriendsContext friendsContext) {
-    final FriendsTabView friendsTabView = FriendsTabView(navigator);
+    final Function onPressFAB = () {
+      print('Choose random friends');
+      navigator.navigateTo('/get_in_touch');
+    }; 
+
+    final FriendsTabView friendsTabView = FriendsTabView(onPressFAB);
 
     // When there's a UI to fill out a new friend, this will be different
     final Function onTapAdd = () async {
