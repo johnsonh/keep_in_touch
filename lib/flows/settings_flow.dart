@@ -13,6 +13,10 @@ class SettingsFlow implements TopLevelTabView {
   }
 
   @override
+  Widget getWidget() {
+    return start();
+  }
+
   Widget start() {
     return Column(children: <Widget>[
       Text("Settings flow", textScaleFactor: 3.0),

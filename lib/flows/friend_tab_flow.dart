@@ -1,21 +1,22 @@
-import 'package:flutter/material.dart'; // can get rid of by moving into view
-
 import '../domain/friend.dart';
 import '../domain/friends_context.dart';
 import '../views/nav_view.dart';
-import '../views/friend_tab_view.dart';
+import '../views/friends_tab_view.dart';
+import '../views/friends_top_tab_view.dart';
 import '../services/navigation_manager.dart'; // URLManager we out here
 
-class FriendTabFlow implements TopLevelTabView {
+class FriendTabFlow implements TopLevelFlow {
   final URLNavigator navigator; 
   final FriendsContext friendsContext;
+  final FriendsTabView friendsTabView;
+  final FriendsTopTabView friendsTopTabView;
+  
+  FriendTabFlow._(this.navigator, this.friendsContext, this.friendsTabView, this.friendsTopTabView);
 
-  final FriendTabView friendsTabView = FriendTabView();
+  factory FriendTabFlow(URLNavigator navigator, FriendsContext friendsContext) {
+    var friendsTabView = FriendsTabView(navigator);
 
-  FriendTabFlow(this.navigator, this.friendsContext);
-
-  @override
-  AppBar getAppBar() {
+    // this will be different when add actually goes to another page, and this saving happens in another button CB
     Function onTapAdd = () async {
       final friend = Friend('Colgate', null, null);
       await friendsContext.saveFriend(friend); // should await
@@ -23,43 +24,22 @@ class FriendTabFlow implements TopLevelTabView {
       print("add a friend"); 
     }; // analytics could be here 
 
-    return AppBar(
-      title: const Text("Friends"),
-      actions: <Widget>[
-        IconButton(
-          icon: const Icon(Icons.person_add),
-          tooltip: 'Add friend',
-          onPressed: onTapAdd 
-        )
-      ]
-    );
+    var friendsTopTabView = FriendsTopTabView(friendsTabView, onTapAdd);
+
+    return new FriendTabFlow._(navigator, friendsContext, friendsTabView, friendsTopTabView);
   }
 
-  @override
-  Widget start() {
+  FriendsTabView start() {
     friendsContext.getAllFriends()
       .then((friends) {
         friends.forEach((f) => friendsTabView.addFriend(f)); 
       });
 
-    var bottomRightFAB = Container(
-        child: FloatingActionButton.extended(
-          icon: Icon(Icons.shuffle),
-          label: Text("NoOp - Press 'Get in Touch!' Below", textScaleFactor: 1.2),
-          onPressed: () {
-            print("Choose random friends");
-            navigator.navigateTo('/get_in_touch');
-          }
-        ),
-        alignment: Alignment.bottomRight,
-        padding: EdgeInsets.all(25)
-      );
-
-    return Stack(children: <Widget>[friendsTabView, bottomRightFAB]);
+      return friendsTabView;
   }
 
   @override
-  BottomNavigationBarItem getNavItem() {
-    return BottomNavigationBarItem(icon: new Icon(Icons.people), title: new Text('Friends'));
+  TopLevelTabView getView() {
+    return friendsTopTabView;
   }
 }

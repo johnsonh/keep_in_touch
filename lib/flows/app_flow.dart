@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 import '../views/app_view.dart';
 import '../domain/friends_client.dart';
 import '../domain/friends_context.dart';
@@ -9,13 +7,6 @@ import '../services/notification_service.dart';
 import 'friend_tab_flow.dart';
 import 'get_in_touch_flow.dart';
 import 'settings_flow.dart';
-
-class Tab {
-  final String title;
-  final BottomNavigationBarItem navItem;
-
-  Tab(this.title, this.navItem);
-}
 
 class AppFlow {
   final NavigationManager navigationManager;
@@ -53,15 +44,11 @@ class AppFlow {
         getInTouchFlow, settingsFlow, friendsClient, friendsContext);
   }
 
-  Widget start() {
+  AppView start() {
     navigationManager.addRoute('/friends', 0);
     navigationManager.addRoute('/get_in_touch', 1);
     navigationManager.addRoute('/settings', 2);
 
-    return MaterialApp(
-      title: 'Flutter Intro App',
-      home: AppView(
-          [friendTabFlow, getInTouchFlow, settingsFlow], navigationManager),
-    );
+    return AppView([friendTabFlow, getInTouchFlow, settingsFlow], navigationManager);
   }
 }

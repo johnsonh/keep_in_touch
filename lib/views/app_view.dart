@@ -4,8 +4,8 @@ import 'nav_view.dart';
 import '../services/navigation_manager.dart';
 
 class AppView extends StatefulWidget {
-  final List<TopLevelTabView> _tabs;
-  final NavigationManager navigationManager; 
+  final List<TopLevelFlow> _tabs;
+  final NavigationManager navigationManager;
   const AppView(this._tabs, this.navigationManager);
 
   @override
@@ -13,7 +13,7 @@ class AppView extends StatefulWidget {
 }
 
 class AppViewState extends State<AppView> {
-  TopLevelTabView currentTab;
+  TopLevelFlow currentTab;
 
   AppViewState(this.currentTab);
 
@@ -25,10 +25,13 @@ class AppViewState extends State<AppView> {
       });
     };
 
-    return Scaffold(
-      appBar: currentTab.getAppBar(),
-      body: currentTab.start(),
-      bottomNavigationBar: NavView(widget._tabs, widget.navigationManager, onSwitchTabs),
-    );
+    return MaterialApp(
+        title: 'Flutter Intro App',
+        home: Scaffold(
+          appBar: currentTab.getView().getAppBar(),
+          body: currentTab.getView().getWidget(),
+          bottomNavigationBar: NavView(widget._tabs, widget.navigationManager, onSwitchTabs),
+        )
+      );
   }
 }
