@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'nav_view.dart';
-import '../services/navigation_manager.dart';
+import '../services/url_navigator.dart';
 
 class AppView extends StatefulWidget {
   final List<TopLevelFlow> _tabs;

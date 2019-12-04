@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../services/navigation_manager.dart';
+import '../app_nav.dart';
 
 abstract class TopLevelFlow {
   TopLevelTabView getTopLevelViews();
@@ -17,9 +17,9 @@ abstract class TopLevelTabView {
 
 class NavView extends StatefulWidget {
   final List<TopLevelFlow> _tabs;
-  final NavigationManager navigationManager; 
+  final AppNav appNav; 
   final Function(int index) onSwitchTabs;
-  const NavView(this._tabs, this.navigationManager, this.onSwitchTabs);
+  const NavView(this._tabs, this.appNav, this.onSwitchTabs);
 
   @override
   NavViewState createState() => NavViewState();
@@ -42,7 +42,7 @@ class NavViewState extends State<NavView> {
       currentIndex: _currentTabIndex,
       // should be providers?
       items: widget._tabs.map((tab) => tab.getTopLevelViews().getNavItem()).toList(),
-      key: widget.navigationManager.navigatorKey,
+      key: widget.appNav.navigatorKey,
     );
   }
 }

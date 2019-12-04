@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import '../domain/friend.dart';
-import '../services/navigation_manager.dart';
+import '../services/url_navigator.dart';
 import 'friends_list_view.dart';
 
 class FriendsTabView extends StatelessWidget {

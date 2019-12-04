@@ -3,7 +3,7 @@ import '../domain/friends_context.dart';
 import '../views/nav_view.dart';
 import '../views/friends_tab_view.dart';
 import '../views/friends_top_tab_view.dart';
-import '../services/navigation_manager.dart'; // URLManager we out here
+import '../services/url_navigator.dart'; // URLManager we out here
 
 class FriendTabFlow implements TopLevelFlow {
   final URLNavigator navigator; 

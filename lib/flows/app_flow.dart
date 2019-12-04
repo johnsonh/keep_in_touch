@@ -1,7 +1,7 @@
+import '../app_nav.dart';
 import '../views/app_view.dart';
 import '../domain/friends_client.dart';
 import '../domain/friends_context.dart';
-import '../services/navigation_manager.dart';
 import '../services/notification_service.dart';
 
 import 'friend_tab_flow.dart';
@@ -9,7 +9,7 @@ import 'get_in_touch_flow.dart';
 import 'settings_flow.dart';
 
 class AppFlow {
-  final NavigationManager navigationManager;
+  final AppNav appNav;
   final NotificationService notificationService;
   final FriendTabFlow friendTabFlow;
   final GetInTouchFlow getInTouchFlow;
@@ -19,7 +19,7 @@ class AppFlow {
   final FriendsContext friendsContext;
 
   AppFlow._(
-      this.navigationManager,
+      this.appNav,
       this.notificationService,
       this.friendTabFlow,
       this.getInTouchFlow,
@@ -29,26 +29,26 @@ class AppFlow {
 
   // This should be replaced with DI
   factory AppFlow() {
-    var navigationManager = NavigationManager();
+    var appNav = AppNav();
     var notificationService =
-        NotificationService(navigationManager.onSelectNotification);
+        NotificationService(appNav.onSelectNotification);
 
     var friendsClient = FriendsClient();
     friendsClient.database;
     var friendsContext = FriendsContext(friendsClient);
 
-    var friendTabFlow = FriendTabFlow(navigationManager, friendsContext);
+    var friendTabFlow = FriendTabFlow(appNav, friendsContext);
     var getInTouchFlow = GetInTouchFlow(friendsContext);
     var settingsFlow = SettingsFlow(notificationService);
-    return new AppFlow._(navigationManager, notificationService, friendTabFlow,
+    return new AppFlow._(appNav, notificationService, friendTabFlow,
         getInTouchFlow, settingsFlow, friendsClient, friendsContext);
   }
 
   AppView start() {
-    navigationManager.addRoute('/friends', 0);
-    navigationManager.addRoute('/get_in_touch', 1);
-    navigationManager.addRoute('/settings', 2);
+    appNav.addRoute('/friends', 0);
+    appNav.addRoute('/get_in_touch', 1);
+    appNav.addRoute('/settings', 2);
 
-    return AppView([friendTabFlow, getInTouchFlow, settingsFlow], navigationManager);
+    return AppView([friendTabFlow, getInTouchFlow, settingsFlow], appNav);
   }
 }
