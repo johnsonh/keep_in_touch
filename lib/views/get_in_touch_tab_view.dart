@@ -5,10 +5,10 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 import '../domain/friend.dart';
 
-class GetInTouchView extends StatelessWidget{
+class GetInTouchTabView extends StatelessWidget{
   final Future<List<Friend>> friends;
 
-  GetInTouchView(this.friends);
+  GetInTouchTabView(this.friends);
 
   @override
   Widget build(BuildContext context) {

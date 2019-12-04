@@ -1,17 +1,11 @@
-
 import 'package:flutter/material.dart';
 
-import 'friends_tab_view.dart';
 import 'nav_view.dart';
 
-class FriendsTopTabView implements TopLevelTabView {
+class FriendsTabNavViews extends TopLevelNavViews {
   final Function onTapAdd; 
 
-  FriendsTopTabView(FriendsTabView friendsTabView, this.onTapAdd) : super(friendsTabView);
-
-  // @override
-  // // TODO: implement widget
-  // Widget get widget => null;
+  FriendsTabNavViews(Widget widget, this.onTapAdd) : super(widget);
 
   @override
   AppBar getAppBar() {

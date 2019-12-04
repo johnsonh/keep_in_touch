@@ -3,20 +3,16 @@ import 'package:flutter/material.dart';
 import '../app_nav.dart';
 
 abstract class TopLevelFlow {
-  TopLevelTabView getTopLevelViews();
-}
-
-mixin TopLevel<HasViews extends TopLevelTabView> {
-  
+  TopLevelNavViews getTopLevelNavViews();
 }
 
 // Each top level flow owns its app bar, body, and individual tab item
-abstract class TopLevelTabView {
+abstract class TopLevelNavViews {
   final Widget widget;
   AppBar getAppBar();
   BottomNavigationBarItem getNavItem();
 
-  TopLevelTabView(this.widget);
+  TopLevelNavViews(this.widget);
 }
 
 class NavView extends StatefulWidget {
@@ -45,7 +41,7 @@ class NavViewState extends State<NavView> {
       onTap: onTap,
       currentIndex: _currentTabIndex,
       // should be providers?
-      items: widget._tabs.map((tab) => tab.getTopLevelViews().getNavItem()).toList(),
+      items: widget._tabs.map((tab) => tab.getTopLevelNavViews().getNavItem()).toList(),
       key: widget.appNav.navigatorKey,
     );
   }

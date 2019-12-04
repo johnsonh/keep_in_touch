@@ -2,16 +2,16 @@ import '../domain/friend.dart';
 import '../domain/friends_context.dart';
 import '../views/nav_view.dart';
 import '../views/friends_tab_view.dart';
-import '../views/friends_top_tab_view.dart';
+import '../views/friends_tab_nav_views.dart';
 import '../services/url_navigator.dart'; // URLManager we out here
 
 class FriendTabFlow implements TopLevelFlow {
   final URLNavigator navigator; 
   final FriendsContext friendsContext;
   final FriendsTabView friendsTabView;
-  final FriendsTopTabView friendsTopTabView;
+  final FriendsTabNavViews friendsTabNavViews;
   
-  FriendTabFlow._(this.navigator, this.friendsContext, this.friendsTabView, this.friendsTopTabView);
+  FriendTabFlow._(this.navigator, this.friendsContext, this.friendsTabView, this.friendsTabNavViews);
 
   factory FriendTabFlow(URLNavigator navigator, FriendsContext friendsContext) {
     var friendsTabView = FriendsTabView(navigator);
@@ -24,9 +24,9 @@ class FriendTabFlow implements TopLevelFlow {
       print("add a friend"); 
     }; // analytics could be here 
 
-    var friendsTopTabView = FriendsTopTabView(friendsTabView, onTapAdd);
+    var friendsTabNavViews = FriendsTabNavViews(friendsTabView, onTapAdd);
 
-    return new FriendTabFlow._(navigator, friendsContext, friendsTabView, friendsTopTabView);
+    return new FriendTabFlow._(navigator, friendsContext, friendsTabView, friendsTabNavViews);
   }
 
   FriendsTabView start() {
@@ -39,7 +39,7 @@ class FriendTabFlow implements TopLevelFlow {
   }
 
   @override
-  TopLevelTabView getTopLevelViews() {
-    return friendsTopTabView;
+  TopLevelNavViews getTopLevelNavViews() {
+    return friendsTabNavViews;
   }
 }

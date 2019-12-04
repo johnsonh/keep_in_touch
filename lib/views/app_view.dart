@@ -28,8 +28,8 @@ class AppViewState extends State<AppView> {
     return MaterialApp(
         title: 'Flutter Intro App',
         home: Scaffold(
-          appBar: currentTab.getTopLevelViews().getAppBar(),
-          body: currentTab.getTopLevelViews().getWidget(),
+          appBar: currentTab.getTopLevelNavViews().getAppBar(),
+          body: currentTab.getTopLevelNavViews().widget,
           bottomNavigationBar: NavView(widget._tabs, widget.navigator, onSwitchTabs),
         )
       );

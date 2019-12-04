@@ -1,30 +1,26 @@
+import '../domain/friend.dart';
 import '../domain/friends_context.dart';
+import '../views/get_in_touch_tab_view.dart';
+import '../views/get_in_touch_tab_nav_views.dart';
 import '../views/nav_view.dart'; // how to get rid of this
 
 class GetInTouchFlow implements TopLevelFlow {
   final FriendsContext friendsContext;
-  // final getInTouchTopTabView
+  final GetInTouchTabView getInTouchTabView; 
+  final GetInTouchTabNavViews getInTouchTabNavViews;
 
-  GetInTouchFlow(this.friendsContext); // DI
+  GetInTouchFlow._(this.friendsContext, this.getInTouchTabView, this.getInTouchTabNavViews);
 
-  @override
-  AppBar getAppBar() {
-    return AppBar(title: Text("Get In Touch"));
+  factory GetInTouchFlow(FriendsContext friendsContext) {
+    Future<List<Friend>> friends = friendsContext.getRandomFriends();
+    var getInTouchTabView = GetInTouchTabView(friends); 
+    var getInTouchTabNavViews = GetInTouchTabNavViews(getInTouchTabView);
+
+    return new GetInTouchFlow._(friendsContext, getInTouchTabView, getInTouchTabNavViews);
   }
 
   @override
-  Widget getWidget() {
-    return start();
-  }
-
-  @override
-  BottomNavigationBarItem getNavItem() {
-    return BottomNavigationBarItem(
-        icon: new Icon(Icons.mail), title: new Text('Get In Touch!'));
-  }
-
-  @override
-  TopLevelTabView getTopLevelViews() {
-    return getInTouchTopTabView;
+  TopLevelNavViews getTopLevelNavViews() {
+    return getInTouchTabNavViews;
   }
 }

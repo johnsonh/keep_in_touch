@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../views/nav_view.dart'; // how to get rid of this
 import '../services/notification_service.dart';
 
-class SettingsFlow implements TopLevelTabView {
+class SettingsFlow implements TopLevelNavViews {
   final NotificationService notificationService;
 
   SettingsFlow(this.notificationService);
