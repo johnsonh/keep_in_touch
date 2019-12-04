@@ -1,14 +1,16 @@
-// should theoretically wrap in service
-// and callback to flow to do the logic of calling service
-import 'package:url_launcher/url_launcher.dart';
-
 import 'package:flutter/material.dart';
 import '../domain/friend.dart';
 
 class GetInTouchTabView extends StatelessWidget{
   final Future<List<Friend>> friends;
+  final Function(int phoneNumber) didTapSMS;
+  final Function didTapMessenger;
+  final Function didTapWhatsapp;
+  final Function didTapSlack;
+  final Function didTapWeChat;
+  final Function didTapLinkedin;
 
-  GetInTouchTabView(this.friends);
+  GetInTouchTabView(this.friends, this.didTapSMS, this.didTapMessenger, this.didTapWhatsapp, this.didTapSlack, this.didTapWeChat, this.didTapLinkedin);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,7 @@ class GetInTouchTabView extends StatelessWidget{
         }
 
         if (friendsSnapshot.data == null) return Container(); 
-        return ContactFriendView(friendsSnapshot.data[0]);
+        return ContactFriendView(friendsSnapshot.data[0], didTapSMS, didTapMessenger, didTapWhatsapp, didTapSlack, didTapWeChat, didTapLinkedin);
       },
       future: friendsFuture,
     ); 
@@ -33,6 +35,13 @@ class GetInTouchTabView extends StatelessWidget{
 
 class ContactFriendView extends StatelessWidget {
   final Friend friend;
+  final Function(int phoneNumber) didTapSMS;
+  final Function didTapMessenger;
+  final Function didTapWhatsapp;
+  final Function didTapSlack;
+  final Function didTapWeChat;
+  final Function didTapLinkedin;
+
   final messageOption1 = "Hey!! It's been a while, how've you been?";
   final messageOption2 = "Hello, how have you been";
   final messageOption3 = "Hey! How's life?";
@@ -40,7 +49,7 @@ class ContactFriendView extends StatelessWidget {
   final messageOption5 = "How is life my dude";
   final messageOption6 = "Hey! Sorry I never responded. How've you been?";
   
-  const ContactFriendView(this.friend);
+  const ContactFriendView(this.friend, this.didTapSMS, this.didTapMessenger, this.didTapWhatsapp, this.didTapSlack, this.didTapWeChat, this.didTapLinkedin);
 
   @override
   Widget build(BuildContext context) {    
@@ -52,27 +61,30 @@ class ContactFriendView extends StatelessWidget {
         SizedBox(height: 100),
         // couldn't do - IG, hangouts, 
         RaisedButton(
-          onPressed: _launchSMS,
+          onPressed: () { 
+            didTapSMS(friend.phoneNumber); 
+            return;  
+          },
           child: Text('Send SMS (if phone # exists)'),
         ),
         RaisedButton(
-          onPressed: _launchWeChat,
+          onPressed: didTapWeChat,
           child: Text('Open WeChat'),
         ),
         RaisedButton(
-          onPressed: _launchSlack,
+          onPressed: didTapSlack,
           child: Text('Open Slack'),
         ),
         RaisedButton(
-          onPressed: _launchLinkedin,
+          onPressed: didTapLinkedin,
           child: Text('Open Linkedin'),
         ),
         RaisedButton(
-          onPressed: _launchFBMessenger,
+          onPressed: didTapMessenger,
           child: Text('Open Messenger'),
         ),
         RaisedButton(
-          onPressed: _launchWhatsapp,
+          onPressed: didTapWhatsapp,
           child: Text('Open Whatsapp'),
         ),
         SelectableText(messageOption1, style: TextStyle(fontSize: 18)),
@@ -83,56 +95,5 @@ class ContactFriendView extends StatelessWidget {
         SelectableText(messageOption6, style: TextStyle(fontSize: 18)),
       ],
     );
-  }
-
-  _launchSMS()  async {
-    String phoneAsString = friend.phoneNumber.toString();
-    if (!_isValidPhoneNumber(phoneAsString)) return; 
-
-    var url = 'sms:' + phoneAsString;
-    _launch(url);
-  }
-
-  bool _isValidPhoneNumber(String value) {
-    Pattern pattern = '\\A[0-9]{10}\\z';
-    RegExp regex = new RegExp(pattern);
-    if (!regex.hasMatch(value))
-      return true;
-    else
-      return false;
-  }
-
-  // TODO: these launches should be put behind a service and called from flow
-  _launchFBMessenger() async {
-    var url = 'fb-messenger://compose';
-    _launch(url);
-  }
-
-  _launchWhatsapp() async {
-    var url = 'whatsapp://send?text=Hi!';
-    _launch(url);
-  }
-
-  _launchSlack() async {
-    var url = 'slack://';
-    _launch(url);
-  }
-
-  _launchWeChat() async {
-    var url = 'weixin://';
-    _launch(url);
-  }
-
-  _launchLinkedin() async {
-    var url = 'linkedin://profile';
-    _launch(url);
-  }
-
-  _launch(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
   }
 }

@@ -1,3 +1,5 @@
+import 'package:keep_in_touch/services/url_launch_service.dart';
+
 import '../app_nav.dart';
 import '../views/app_view.dart';
 import '../domain/friends_client.dart';
@@ -11,6 +13,8 @@ import 'settings_tab_flow.dart';
 class AppFlow {
   final AppNav appNav;
   final NotificationService notificationService;
+  final UrlLaunchService urlLaunchService; 
+
   final FriendTabFlow friendTabFlow;
   final GetInTouchFlow getInTouchFlow;
   final SettingsTabFlow settingsFlow;
@@ -21,6 +25,7 @@ class AppFlow {
   AppFlow._(
       this.appNav,
       this.notificationService,
+      this.urlLaunchService,
       this.friendTabFlow,
       this.getInTouchFlow,
       this.settingsFlow,
@@ -32,15 +37,16 @@ class AppFlow {
     var appNav = AppNav();
     var notificationService =
         NotificationService(appNav.onSelectNotification);
+    var urlLaunchService = UrlLaunchService();
 
     var friendsClient = FriendsClient();
     friendsClient.database;
     var friendsContext = FriendsContext(friendsClient);
 
     var friendTabFlow = FriendTabFlow(appNav, friendsContext);
-    var getInTouchFlow = GetInTouchFlow(friendsContext);
+    var getInTouchFlow = GetInTouchFlow(friendsContext, urlLaunchService);
     var settingsFlow = SettingsTabFlow(notificationService);
-    return new AppFlow._(appNav, notificationService, friendTabFlow,
+    return new AppFlow._(appNav, notificationService, urlLaunchService, friendTabFlow,
       getInTouchFlow, settingsFlow, friendsClient, friendsContext);
   }
 
