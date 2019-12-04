@@ -39,7 +39,7 @@ class FriendTabFlow implements TopLevelFlow {
   }
 
   @override
-  TopLevelTabView getView() {
+  TopLevelTabView getTopLevelViews() {
     return friendsTopTabView;
   }
 }

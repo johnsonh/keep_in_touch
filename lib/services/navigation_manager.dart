@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-// TODO: Change all references of NavigationManager to URLNavigator wherever possible
 abstract class URLNavigator {
   Future<dynamic> navigateTo(String routeName);
 }

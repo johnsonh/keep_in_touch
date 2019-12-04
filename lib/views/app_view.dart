@@ -5,8 +5,8 @@ import '../services/navigation_manager.dart';
 
 class AppView extends StatefulWidget {
   final List<TopLevelFlow> _tabs;
-  final NavigationManager navigationManager;
-  const AppView(this._tabs, this.navigationManager);
+  final URLNavigator navigator;
+  const AppView(this._tabs, this.navigator);
 
   @override
   AppViewState createState() => AppViewState(_tabs[0]);
@@ -28,9 +28,9 @@ class AppViewState extends State<AppView> {
     return MaterialApp(
         title: 'Flutter Intro App',
         home: Scaffold(
-          appBar: currentTab.getView().getAppBar(),
-          body: currentTab.getView().getWidget(),
-          bottomNavigationBar: NavView(widget._tabs, widget.navigationManager, onSwitchTabs),
+          appBar: currentTab.getTopLevelViews().getAppBar(),
+          body: currentTab.getTopLevelViews().getWidget(),
+          bottomNavigationBar: NavView(widget._tabs, widget.navigator, onSwitchTabs),
         )
       );
   }

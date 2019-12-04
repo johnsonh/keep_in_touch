@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import '../services/navigation_manager.dart';
 
 abstract class TopLevelFlow {
-  TopLevelTabView getView();
+  TopLevelTabView getTopLevelViews();
 }
 
+// Each top level flow owns its app bar, body, and individual tab item
 abstract class TopLevelTabView {
   AppBar getAppBar();
 
@@ -40,7 +41,7 @@ class NavViewState extends State<NavView> {
       onTap: onTap,
       currentIndex: _currentTabIndex,
       // should be providers?
-      items: widget._tabs.map((tab) => tab.getView().getNavItem()).toList(),
+      items: widget._tabs.map((tab) => tab.getTopLevelViews().getNavItem()).toList(),
       key: widget.navigationManager.navigatorKey,
     );
   }
