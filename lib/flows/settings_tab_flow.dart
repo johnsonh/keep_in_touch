@@ -1,14 +1,14 @@
 import '../views/settings_tab_nav_views.dart';
 import '../views/settings_tab_view.dart';
-import '../views/nav_view.dart'; // how to get rid of this
+import '../views/nav_view.dart';
 import '../services/notification_service.dart';
 
 class SettingsTabFlow implements TopLevelFlow {
   final NotificationService notificationService;
   final SettingsTabView settingsTabView; 
-  final SettingsTabNavViews settingsTabNavViews;
+  final SettingsTabNavViewsProvider settingsTabNavViewsProvider;
 
-  SettingsTabFlow._(this.notificationService, this.settingsTabView, this.settingsTabNavViews);
+  SettingsTabFlow._(this.notificationService, this.settingsTabView, this.settingsTabNavViewsProvider);
 
   factory SettingsTabFlow(NotificationService notificationService) {
     Function onShowTestNotification = notificationService.showNotificationWithDefaultSound;
@@ -26,13 +26,13 @@ class SettingsTabFlow implements TopLevelFlow {
       getScheduledNotifications
     ); 
     
-    var settingsTabNavViews = SettingsTabNavViews(settingsTabView);
+    var settingsTabNavViews = SettingsTabNavViewsProvider(settingsTabView);
 
     return new SettingsTabFlow._(notificationService, settingsTabView, settingsTabNavViews);
   }
 
   @override
-  TopLevelNavViews getTopLevelNavViews() {
-    return settingsTabNavViews;
+  TopLevelNavViewProvider provideTopLevelNavViews() {
+    return settingsTabNavViewsProvider;
   }
 }

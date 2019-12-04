@@ -41,7 +41,7 @@ class AppFlow {
     var getInTouchFlow = GetInTouchFlow(friendsContext);
     var settingsFlow = SettingsTabFlow(notificationService);
     return new AppFlow._(appNav, notificationService, friendTabFlow,
-        getInTouchFlow, settingsFlow, friendsClient, friendsContext);
+      getInTouchFlow, settingsFlow, friendsClient, friendsContext);
   }
 
   AppView start() {

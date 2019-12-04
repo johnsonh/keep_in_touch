@@ -9,20 +9,20 @@ class FriendTabFlow implements TopLevelFlow {
   final URLNavigator navigator; 
   final FriendsContext friendsContext;
   final FriendsTabView friendsTabView;
-  final FriendsTabNavViews friendsTopTabView;
+  final FriendsTabNavViewsProvider friendsTopTabViewProvider;
   
-  FriendTabFlow._(this.navigator, this.friendsContext, this.friendsTabView, this.friendsTopTabView);
+  FriendTabFlow._(this.navigator, this.friendsContext, this.friendsTabView, this.friendsTopTabViewProvider);
 
   factory FriendTabFlow(URLNavigator navigator, FriendsContext friendsContext) {
     var friendsTabView = FriendsTabView(navigator);
 
-    // this will be different when add actually goes to another page, and this saving happens in another button CB
+    // When there's a UI to fill out a new friend, this will be different
     Function onTapAdd = () async {
       final friend = Friend('Elephant', null, null);
-      await friendsContext.saveFriend(friend); // should await
+      await friendsContext.saveFriend(friend);
       friendsTabView.addFriend(friend);
       print("add a friend"); 
-    }; // analytics could be here 
+    };
 
     FriendsTabView Function() start = () {
       friendsContext.getAllFriends()
@@ -33,13 +33,13 @@ class FriendTabFlow implements TopLevelFlow {
       return friendsTabView; 
     };
 
-    var friendsTopTabView = FriendsTabNavViews(friendsTabView, onTapAdd, start);
+    var friendsTopTabViewsProvider = FriendsTabNavViewsProvider(friendsTabView, onTapAdd, start);
 
-    return new FriendTabFlow._(navigator, friendsContext, friendsTabView, friendsTopTabView);
+    return new FriendTabFlow._(navigator, friendsContext, friendsTabView, friendsTopTabViewsProvider);
   }
 
   @override
-  TopLevelNavViews getTopLevelNavViews() {
-    return friendsTopTabView;
+  TopLevelNavViewProvider provideTopLevelNavViews() {
+    return friendsTopTabViewProvider;
   }
 }

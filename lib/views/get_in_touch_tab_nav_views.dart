@@ -4,10 +4,10 @@ import 'package:keep_in_touch/views/get_in_touch_tab_view.dart';
 
 import 'nav_view.dart';
 
-class GetInTouchTabNavViews extends TopLevelNavViews {
+class GetInTouchTabNavViewsProvider extends TopLevelNavViewProvider {
   final GetInTouchTabView Function() start;
 
-  GetInTouchTabNavViews(Widget widget, this.start) : super(widget);
+  GetInTouchTabNavViewsProvider(Widget widget, this.start) : super(widget);
 
   @override
   get widget {

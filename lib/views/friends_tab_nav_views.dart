@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'friends_tab_view.dart';
 import 'nav_view.dart';
 
-class FriendsTabNavViews extends TopLevelNavViews {
+class FriendsTabNavViewsProvider extends TopLevelNavViewProvider {
   final Function onTapAdd; 
   final FriendsTabView Function() start; 
 
-  FriendsTabNavViews(Widget widget, this.onTapAdd, this.start) : super(widget);
+  FriendsTabNavViewsProvider(Widget widget, this.onTapAdd, this.start) : super(widget);
 
   @override
   get widget {

@@ -102,6 +102,7 @@ class ContactFriendView extends StatelessWidget {
       return false;
   }
 
+  // TODO: these launches should be put behind a service and called from flow
   _launchFBMessenger() async {
     var url = 'fb-messenger://compose';
     _launch(url);

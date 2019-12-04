@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 import 'nav_view.dart';
 
-class SettingsTabNavViews extends TopLevelNavViews {
-  SettingsTabNavViews(Widget widget) : super(widget);
+class SettingsTabNavViewsProvider extends TopLevelNavViewProvider {
+  SettingsTabNavViewsProvider(Widget widget) : super(widget);
 
   @override
   AppBar getAppBar() {
