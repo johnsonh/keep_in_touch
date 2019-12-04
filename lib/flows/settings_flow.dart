@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'nav_view.dart'; // how to get rid of this
-import 'notification_service.dart';
+import '../views/nav_view.dart'; // how to get rid of this
+import '../services/notification_service.dart';
 
 class SettingsFlow implements TopLevelTabView {
   final NotificationService notificationService;

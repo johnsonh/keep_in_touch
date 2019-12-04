@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:keep_in_touch/friend.dart';
+import '../domain/friend.dart';
 
 class FriendTabView extends StatelessWidget {
   final StreamController<Friend> _controller = StreamController<Friend>.broadcast();

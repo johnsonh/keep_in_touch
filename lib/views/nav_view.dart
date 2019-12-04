@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'navigation_manager.dart';
+import '../services/navigation_manager.dart';
 
 class TopLevelTabView {
   AppBar getAppBar() {

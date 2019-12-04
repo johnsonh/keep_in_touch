@@ -4,7 +4,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'friend_model.dart';
-import 'sql_init_scripts.dart';
+import '../services/sql_init_scripts.dart';
 
 class FriendsClient {
   Database _database;

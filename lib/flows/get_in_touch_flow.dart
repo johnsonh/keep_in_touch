@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'friends_context.dart';
-import 'friend.dart';
-import 'nav_view.dart'; // how to get rid of this
+import '../domain/friends_context.dart';
+import '../domain/friend.dart';
+import '../views/nav_view.dart'; // how to get rid of this
 
 class GetInTouchFlow implements TopLevelTabView {
   final FriendsContext friendsContext;

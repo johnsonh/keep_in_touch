@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-import 'app_flow.dart';
+import 'flows/app_flow.dart';
 
 void main() => runApp(MyApp());
 

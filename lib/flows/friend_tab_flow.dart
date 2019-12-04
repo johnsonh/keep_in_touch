@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart'; // how to get rid of this
+import 'package:flutter/material.dart'; // can get rid of by moving into view
 
-import 'friend.dart';
-import 'nav_view.dart';
-import 'friend_tab_view.dart';
-import 'friends_context.dart';
-import 'navigation_manager.dart'; // URLManager we out here
+import '../domain/friend.dart';
+import '../domain/friends_context.dart';
+import '../views/nav_view.dart';
+import '../views/friend_tab_view.dart';
+import '../services/navigation_manager.dart'; // URLManager we out here
 
 class FriendTabFlow implements TopLevelTabView {
   final URLNavigator navigator; 
