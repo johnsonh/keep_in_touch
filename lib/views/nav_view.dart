@@ -6,13 +6,17 @@ abstract class TopLevelFlow {
   TopLevelTabView getTopLevelViews();
 }
 
+mixin TopLevel<HasViews extends TopLevelTabView> {
+  
+}
+
 // Each top level flow owns its app bar, body, and individual tab item
 abstract class TopLevelTabView {
+  final Widget widget;
   AppBar getAppBar();
-
-  Widget getWidget();
-
   BottomNavigationBarItem getNavItem();
+
+  TopLevelTabView(this.widget);
 }
 
 class NavView extends StatefulWidget {

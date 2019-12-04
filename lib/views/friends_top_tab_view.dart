@@ -5,10 +5,13 @@ import 'friends_tab_view.dart';
 import 'nav_view.dart';
 
 class FriendsTopTabView implements TopLevelTabView {
-  final FriendsTabView friendsTabView;
   final Function onTapAdd; 
 
-  FriendsTopTabView(this.friendsTabView, this.onTapAdd);
+  FriendsTopTabView(FriendsTabView friendsTabView, this.onTapAdd) : super(friendsTabView);
+
+  // @override
+  // // TODO: implement widget
+  // Widget get widget => null;
 
   @override
   AppBar getAppBar() {
@@ -22,11 +25,6 @@ class FriendsTopTabView implements TopLevelTabView {
         )
       ]
     );
-  }
-
-  @override
-  Widget getWidget() {
-    return friendsTabView;
   }
 
   @override
