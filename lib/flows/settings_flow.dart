@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../views/nav_view.dart'; // how to get rid of this
 import '../services/notification_service.dart';
 
-class SettingsFlow implements TopLevelNavViews {
+class SettingsFlow implements TopLevelFlow, TopLevelNavViews {
   final NotificationService notificationService;
 
   SettingsFlow(this.notificationService);
@@ -10,11 +10,6 @@ class SettingsFlow implements TopLevelNavViews {
   @override
   AppBar getAppBar() {
     return AppBar(title: Text("Settings"));
-  }
-
-  @override
-  Widget getWidget() {
-    return start();
   }
 
   Widget start() {
@@ -77,4 +72,12 @@ class SettingsFlow implements TopLevelNavViews {
     return BottomNavigationBarItem(
         icon: Icon(Icons.settings), title: Text('Settings'));
   }
+
+  @override
+  TopLevelNavViews getTopLevelNavViews() {
+    return this;
+  }
+
+  @override
+  Widget get widget => start();
 }

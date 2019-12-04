@@ -14,7 +14,13 @@ class GetInTouchFlow implements TopLevelFlow {
   factory GetInTouchFlow(FriendsContext friendsContext) {
     Future<List<Friend>> friends = friendsContext.getRandomFriends();
     var getInTouchTabView = GetInTouchTabView(friends); 
-    var getInTouchTabNavViews = GetInTouchTabNavViews(getInTouchTabView);
+
+    GetInTouchTabView Function() start = () {
+      Future<List<Friend>> friends = friendsContext.getRandomFriends();
+      return GetInTouchTabView(friends); 
+    };
+
+    var getInTouchTabNavViews = GetInTouchTabNavViews(getInTouchTabView, start);
 
     return new GetInTouchFlow._(friendsContext, getInTouchTabView, getInTouchTabNavViews);
   }

@@ -9,37 +9,37 @@ class FriendTabFlow implements TopLevelFlow {
   final URLNavigator navigator; 
   final FriendsContext friendsContext;
   final FriendsTabView friendsTabView;
-  final FriendsTabNavViews friendsTabNavViews;
+  final FriendsTabNavViews friendsTopTabView;
   
-  FriendTabFlow._(this.navigator, this.friendsContext, this.friendsTabView, this.friendsTabNavViews);
+  FriendTabFlow._(this.navigator, this.friendsContext, this.friendsTabView, this.friendsTopTabView);
 
   factory FriendTabFlow(URLNavigator navigator, FriendsContext friendsContext) {
     var friendsTabView = FriendsTabView(navigator);
 
     // this will be different when add actually goes to another page, and this saving happens in another button CB
     Function onTapAdd = () async {
-      final friend = Friend('Colgate', null, null);
+      final friend = Friend('Elephant', null, null);
       await friendsContext.saveFriend(friend); // should await
       friendsTabView.addFriend(friend);
       print("add a friend"); 
     }; // analytics could be here 
 
-    var friendsTabNavViews = FriendsTabNavViews(friendsTabView, onTapAdd);
+    FriendsTabView Function() start = () {
+      friendsContext.getAllFriends()
+        .then((friends) {
+          friends.forEach((f) => friendsTabView.addFriend(f)); 
+        });
 
-    return new FriendTabFlow._(navigator, friendsContext, friendsTabView, friendsTabNavViews);
-  }
+      return friendsTabView; 
+    };
 
-  FriendsTabView start() {
-    friendsContext.getAllFriends()
-      .then((friends) {
-        friends.forEach((f) => friendsTabView.addFriend(f)); 
-      });
+    var friendsTopTabView = FriendsTabNavViews(friendsTabView, onTapAdd, start);
 
-      return friendsTabView;
+    return new FriendTabFlow._(navigator, friendsContext, friendsTabView, friendsTopTabView);
   }
 
   @override
   TopLevelNavViews getTopLevelNavViews() {
-    return friendsTabNavViews;
+    return friendsTopTabView;
   }
 }

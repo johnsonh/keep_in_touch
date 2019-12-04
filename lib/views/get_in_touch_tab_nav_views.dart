@@ -1,11 +1,18 @@
 
 import 'package:flutter/material.dart';
+import 'package:keep_in_touch/views/get_in_touch_tab_view.dart';
 
 import 'nav_view.dart';
 
 class GetInTouchTabNavViews extends TopLevelNavViews {
+  final GetInTouchTabView Function() start;
 
-  GetInTouchTabNavViews(Widget widget) : super(widget);
+  GetInTouchTabNavViews(Widget widget, this.start) : super(widget);
+
+  @override
+  get widget {
+    return start();
+  }
 
   @override
   AppBar getAppBar() {
