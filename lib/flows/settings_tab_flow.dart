@@ -1,35 +1,42 @@
+import '../services/notification_service.dart';
+import '../views/nav_view.dart';
 import '../views/settings_tab_nav_views.dart';
 import '../views/settings_tab_view.dart';
-import '../views/nav_view.dart';
-import '../services/notification_service.dart';
 
 class SettingsTabFlow implements TopLevelFlow {
-  final NotificationService notificationService;
-  final SettingsTabView settingsTabView; 
-  final SettingsTabNavViewsProvider settingsTabNavViewsProvider;
-
-  SettingsTabFlow._(this.notificationService, this.settingsTabView, this.settingsTabNavViewsProvider);
-
   factory SettingsTabFlow(NotificationService notificationService) {
-    Function onShowTestNotification = notificationService.showNotificationWithDefaultSound;
-    Function onScheduleNotification = notificationService.scheduleNotification;
-    Function onScheduleNotificationEveryMinute = notificationService.scheduleNotificationEveryMin;
-    Function onScheduleNotificationDaily = notificationService.scheduleNotificationDaily;
-    Future<List<Notification>> getScheduledNotifications = notificationService.getScheduledNotifications()
-      .then((notifications) => notifications.map((pending) => Notification(pending.id, pending.title, pending.body, pending.payload)).toList()); 
+    final Function onShowTestNotification =
+        notificationService.showNotificationWithDefaultSound;
+    final Function onScheduleNotification = notificationService.scheduleNotification;
+    final Function onScheduleNotificationEveryMinute =
+        notificationService.scheduleNotificationEveryMin;
+    final Function onScheduleNotificationDaily =
+        notificationService.scheduleNotificationDaily;
+    final Future<List<Notification>> getScheduledNotifications = notificationService
+        .getScheduledNotifications()
+        .then((List<PendingNotification> notifications) => notifications
+            .map((PendingNotification pending) => Notification(
+                pending.id, pending.title, pending.body, pending.payload))
+            .toList());
 
-    var settingsTabView = SettingsTabView(
-      onShowTestNotification, 
-      onScheduleNotification, 
-      onScheduleNotificationEveryMinute, 
-      onScheduleNotificationDaily, 
-      getScheduledNotifications
-    ); 
-    
-    var settingsTabNavViews = SettingsTabNavViewsProvider(settingsTabView);
+    final SettingsTabView settingsTabView = SettingsTabView(
+        onShowTestNotification,
+        onScheduleNotification,
+        onScheduleNotificationEveryMinute,
+        onScheduleNotificationDaily,
+        getScheduledNotifications);
 
-    return new SettingsTabFlow._(notificationService, settingsTabView, settingsTabNavViews);
+    final SettingsTabNavViewsProvider settingsTabNavViews = SettingsTabNavViewsProvider(settingsTabView);
+
+    return SettingsTabFlow._(notificationService, settingsTabView, settingsTabNavViews);
   }
+
+  SettingsTabFlow._(this.notificationService, this.settingsTabView,
+      this.settingsTabNavViewsProvider);
+
+  final NotificationService notificationService;
+  final SettingsTabView settingsTabView;
+  final SettingsTabNavViewsProvider settingsTabNavViewsProvider;
 
   @override
   TopLevelNavViewProvider provideTopLevelNavViews() {

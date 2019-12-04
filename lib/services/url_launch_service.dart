@@ -1,53 +1,52 @@
 import 'package:url_launcher/url_launcher.dart';
 
 class UrlLaunchService {
-
   bool isValidPhoneNumber(String value) {
-    Pattern pattern = "^\d{10}\$";
-    RegExp regex = new RegExp(pattern);
+    const Pattern pattern = '^\d{10}\$';
+    final RegExp regex = RegExp(pattern);
     if (regex.hasMatch(value))
       return true;
     else
       return false;
   }
 
-  launchSMS(int phoneNumber) async {
-    String phoneAsString = phoneNumber.toString();
+  Future<void> launchSMS(int phoneNumber) async {
+    final String phoneAsString = phoneNumber.toString();
     if (!isValidPhoneNumber(phoneAsString)) {
-      print("Not a legit phone number: " + phoneAsString);
-      return; 
+      print('Not a legit phone number: ' + phoneAsString);
+      return;
     }
 
-    var url = 'sms:' + phoneAsString;
+    final String url = 'sms:' + phoneAsString;
     _launch(url);
   }
 
-  launchFBMessenger() async {
-    var url = 'fb-messenger://compose';
+  Future<void> launchFBMessenger() async {
+    const String url = 'fb-messenger://compose';
     _launch(url);
   }
 
-  launchWhatsapp() async {
-    var url = 'whatsapp://send?text=Hi!';
+  Future<void> launchWhatsapp() async {
+    const String url = 'whatsapp://send?text=Hi!';
     _launch(url);
   }
 
-  launchSlack() async {
-    var url = 'slack://';
+  Future<void> launchSlack() async {
+    const String url = 'slack://';
     _launch(url);
   }
 
-  launchWeChat() async {
-    var url = 'weixin://';
+  Future<void> launchWeChat() async {
+    const String url = 'weixin://';
     _launch(url);
   }
 
-  launchLinkedin() async {
-    var url = 'linkedin://profile';
+  Future<void> launchLinkedin() async {
+    const String url = 'linkedin://profile';
     _launch(url);
   }
 
-  _launch(String url) async {
+  Future<void> _launch(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
     } else {

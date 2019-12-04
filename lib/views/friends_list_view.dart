@@ -2,22 +2,22 @@ import 'package:flutter/material.dart';
 import '../domain/friend.dart';
 
 class FriendsListView extends StatefulWidget {
-  final Stream<Friend> friendStream;
-
   const FriendsListView({Key key, this.friendStream}) : super(key: key);
+
+  final Stream<Friend> friendStream;
 
   @override
   FriendsListViewState createState() => FriendsListViewState();
 }
 
 class FriendsListViewState extends State<FriendsListView> {
-  final _friendsList = [];
-  final _biggerFont = const TextStyle(fontSize: 18.0);
+  final List<Friend> _friendsList = <Friend>[];
+  final TextStyle _biggerFont = const TextStyle(fontSize: 18.0);
 
   @override
   void initState() {
     super.initState();
-    this.widget.friendStream.asBroadcastStream().listen((friend) {
+    widget.friendStream.asBroadcastStream().listen((Friend friend) {
       _addFriend(friend);
     });
   }
@@ -27,8 +27,10 @@ class FriendsListViewState extends State<FriendsListView> {
     return _buildFriends();
   }
 
-  _addFriend(Friend friend) {
-    if (!mounted) return;
+  void _addFriend(Friend friend) {
+    if (!mounted) {
+      return;
+    }
     setState(() {
       _friendsList.add(friend);
     });
@@ -36,11 +38,11 @@ class FriendsListViewState extends State<FriendsListView> {
 
   Widget _buildFriends() {
     return ListView.separated(
-      separatorBuilder: (context, index) => Divider(
+      separatorBuilder: (BuildContext context, int index) => Divider(
         color: Colors.black,
       ),
       itemCount: _friendsList.length,
-      itemBuilder: (context, index) {
+      itemBuilder: (BuildContext context, int index) {
         return ListTile(
           title: Text('${_friendsList[index].name}', style: _biggerFont),
         );

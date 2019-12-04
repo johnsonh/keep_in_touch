@@ -3,11 +3,13 @@ import 'friend_model.dart';
 import 'friends_client.dart';
 
 class FriendsContext {
-  final FriendsClient friendsClient; 
+  FriendsContext(this.friendsClient);
 
-  List<Friend> friends = [
-    Friend("Joe", "", 1),
-    Friend("Griffin", "", 1),
+  final FriendsClient friendsClient;
+
+  List<Friend> friends = <Friend>[
+    Friend('Joe', '', 1),
+    Friend('Griffin', '', 1),
     // Friend("Ben chao", "", 1),
     // Friend("Pierce", "", 1),
     // Friend("Jeff", "", 1),
@@ -143,24 +145,27 @@ class FriendsContext {
     // Friend("Andy Phan", "", 1),
   ];
 
-  FriendsContext(this.friendsClient);
-
   Future<List<Friend>> getAllFriends() async {
-    List<FriendModel> friends = await friendsClient.getFriends();
-    return friends.map((f) => Friend(f.name, f.email, f.phoneNumber)).toList();
+    final List<FriendModel> friends = await friendsClient.getFriends();
+    return friends.map((FriendModel f) => Friend(f.name, f.email, f.phoneNumber)).toList();
   }
 
   Future<List<Friend>> getRandomFriends({int num = 1}) async {
-    List<FriendModel> friendModels = await friendsClient.getFriends();
-    List<Friend> friends = friendModels.map((f) => Friend(f.name, f.email, f.phoneNumber)).toList(); 
+    final List<FriendModel> friendModels = await friendsClient.getFriends();
+    final List<Friend> friends = friendModels
+        .map((FriendModel f) => Friend(f.name, f.email, f.phoneNumber))
+        .toList();
 
-    if (num >= friends.length) return friends;
+    if (num >= friends.length) {
+      return friends;
+    }
     return (friends.toList()..shuffle()).take(num).toList();
   }
 
-  saveFriend(Friend friend) async {
-    final friendModel = FriendModel(-1, friend.name, friend.email, friend.phoneNumber);
+  Future<void> saveFriend(Friend friend) async {
+    final FriendModel friendModel =
+        FriendModel(-1, friend.name, friend.email, friend.phoneNumber);
     await friendsClient.insertFriend(friendModel);
-    print("Saved friend");
+    print('Saved friend');
   }
 }

@@ -1,37 +1,36 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class NotificationService {
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
-  final NotificationDetails platformChannelSpecifics;
+  
+  factory NotificationService(Future<void> Function(String payload) onSelectNotification) {
+    const AndroidInitializationSettings initializationSettingsAndroid = 
+      AndroidInitializationSettings('app_icon');
+    const IOSInitializationSettings initializationSettingsIOS = IOSInitializationSettings();
+    const InitializationSettings initializationSettings = InitializationSettings(
+        initializationSettingsAndroid, initializationSettingsIOS);
+
+    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: onSelectNotification);
+
+    final AndroidNotificationDetails androidPlatformChannelSpecifics = AndroidNotificationDetails(
+        'your other channel id',
+        'your other channel name',
+        'your other channel description');
+    final IOSNotificationDetails iOSPlatformChannelSpecifics = IOSNotificationDetails();
+    final NotificationDetails platformChannelSpecifics = NotificationDetails(
+        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+
+    return NotificationService._(flutterLocalNotificationsPlugin, platformChannelSpecifics);
+  }
 
   NotificationService._(
       this.flutterLocalNotificationsPlugin, this.platformChannelSpecifics);
 
-  factory NotificationService(
-      Future Function(String payload) onSelectNotification) {
-    var initializationSettingsAndroid =
-        new AndroidInitializationSettings('app_icon');
-    var initializationSettingsIOS = new IOSInitializationSettings();
-    var initializationSettings = new InitializationSettings(
-        initializationSettingsAndroid, initializationSettingsIOS);
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+  final NotificationDetails platformChannelSpecifics;
 
-    var flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
-    flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: onSelectNotification);
-
-    var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
-        'your other channel id',
-        'your other channel name',
-        'your other channel description');
-    var iOSPlatformChannelSpecifics = new IOSNotificationDetails();
-    var platformChannelSpecifics = new NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-
-    return new NotificationService._(
-        flutterLocalNotificationsPlugin, platformChannelSpecifics);
-  }
-
-  Future showNotificationWithDefaultSound() async {
+  Future<void> showNotificationWithDefaultSound() async {
     await flutterLocalNotificationsPlugin.show(
       0,
       'New Post',
@@ -41,9 +40,8 @@ class NotificationService {
     );
   }
 
-  Future scheduleNotification() async {
-    var scheduledNotificationDateTime =
-        new DateTime.now().add(new Duration(seconds: 3));
+  Future<void> scheduleNotification() async {
+    final DateTime scheduledNotificationDateTime = DateTime.now().add(Duration(seconds: 3));
     await flutterLocalNotificationsPlugin.schedule(
         0,
         'scheduled title',
@@ -53,18 +51,14 @@ class NotificationService {
         payload: '/friends');
   }
 
-  Future scheduleNotificationEveryMin() async {
-    await flutterLocalNotificationsPlugin.periodicallyShow(
-      0,
-      'repeating title',
-      'repeating body',
-      RepeatInterval.EveryMinute,
-      platformChannelSpecifics,
-      payload: '/settings');
+  Future<void> scheduleNotificationEveryMin() async {
+    await flutterLocalNotificationsPlugin.periodicallyShow(0, 'repeating title',
+        'repeating body', RepeatInterval.EveryMinute, platformChannelSpecifics,
+        payload: '/settings');
   }
 
-  Future scheduleNotificationDaily() async {
-    var time = new Time(19, 0, 0);
+  Future<void> scheduleNotificationDaily() async {
+    final Time time = Time(19, 0, 0);
     await flutterLocalNotificationsPlugin.showDailyAtTime(
         0,
         'Keep in touch with a friend!',
@@ -75,17 +69,19 @@ class NotificationService {
   }
 
   Future<List<PendingNotification>> getScheduledNotifications() async {
-    return await flutterLocalNotificationsPlugin.pendingNotificationRequests()
-      .then((results) => results.map((n) => PendingNotification(n.id, n.title, n.body, n.payload)).toList());
+    return await flutterLocalNotificationsPlugin
+        .pendingNotificationRequests()
+        .then((List<PendingNotificationRequest> results) => results
+            .map((PendingNotificationRequest n) => PendingNotification(n.id, n.title, n.body, n.payload))
+            .toList());
   }
 }
 
 class PendingNotification {
+  const PendingNotification(this.id, this.title, this.body, this.payload);
+
   final int id;
   final String title;
   final String body;
   final String payload;
-
-  const PendingNotification(
-      this.id, this.title, this.body, this.payload);
 }

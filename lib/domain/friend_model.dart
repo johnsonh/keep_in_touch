@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 
 class FriendModel {
+  FriendModel(this.id, this.name, this.email, this.phoneNumber);
+
   final int id;
   @required
   final String name;
@@ -13,11 +15,9 @@ class FriendModel {
   // wechat ID
   // linkedin ID
 
-  FriendModel(this.id, this.name, this.email, this.phoneNumber);
-
   // To insert into SQLite DB
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       // 'id': id,
       'name': name,
       'email': email,

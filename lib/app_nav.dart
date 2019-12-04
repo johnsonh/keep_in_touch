@@ -3,23 +3,25 @@ import 'package:flutter/material.dart';
 import 'services/url_navigator.dart';
 
 class AppNav extends URLNavigator {
-  final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-  Future<dynamic> navigateTo(String routeName) {
+  @override
+  Future<void> navigateTo(String routeName) {
     final BottomNavigationBar navigationBar = navigatorKey.currentWidget;
     navigationBar.onTap(_routes[routeName]); // first section of route name
-    return null; 
+    return null;
   }
 
-  Map<String, int> _routes = new Map();
-  addRoute(String key, int value) {
+  final Map<String, int> _routes = <String, int>{};
+
+  void addRoute(String key, int value) {
     _routes.putIfAbsent(key, () => value);
 
     // complex navigation logic beyond the top level tab should have data/handling registered here per module
     // and then handled above in navigateTo
   }
 
-  Future onSelectNotification(String payload) async {
+  Future<void> onSelectNotification(String payload) async {
     print(payload);
     navigateTo(payload);
   }

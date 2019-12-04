@@ -1,26 +1,39 @@
 import 'package:keep_in_touch/services/url_launch_service.dart';
 
 import '../app_nav.dart';
-import '../views/app_view.dart';
 import '../domain/friends_client.dart';
 import '../domain/friends_context.dart';
 import '../services/notification_service.dart';
+import '../views/app_view.dart';
+import '../views/nav_view.dart';
 
 import 'friend_tab_flow.dart';
 import 'get_in_touch_flow.dart';
 import 'settings_tab_flow.dart';
 
 class AppFlow {
-  final AppNav appNav;
-  final NotificationService notificationService;
-  final UrlLaunchService urlLaunchService; 
+  // This should be replaced with DI
+  factory AppFlow() {
+    final AppNav appNav = AppNav();
+    final NotificationService notificationService = NotificationService(appNav.onSelectNotification);
+    final UrlLaunchService urlLaunchService = UrlLaunchService();
 
-  final FriendTabFlow friendTabFlow;
-  final GetInTouchFlow getInTouchFlow;
-  final SettingsTabFlow settingsFlow;
+    final FriendsClient friendsClient = FriendsClient();
+    final FriendsContext friendsContext = FriendsContext(friendsClient);
 
-  final FriendsClient friendsClient;
-  final FriendsContext friendsContext;
+    final FriendTabFlow friendTabFlow = FriendTabFlow(appNav, friendsContext);
+    final GetInTouchFlow getInTouchFlow = GetInTouchFlow(friendsContext, urlLaunchService);
+    final SettingsTabFlow settingsFlow = SettingsTabFlow(notificationService);
+    return AppFlow._(
+        appNav,
+        notificationService,
+        urlLaunchService,
+        friendTabFlow,
+        getInTouchFlow,
+        settingsFlow,
+        friendsClient,
+        friendsContext);
+  }
 
   AppFlow._(
       this.appNav,
@@ -32,29 +45,22 @@ class AppFlow {
       this.friendsClient,
       this.friendsContext);
 
-  // This should be replaced with DI
-  factory AppFlow() {
-    var appNav = AppNav();
-    var notificationService =
-        NotificationService(appNav.onSelectNotification);
-    var urlLaunchService = UrlLaunchService();
+  final AppNav appNav;
+  final NotificationService notificationService;
+  final UrlLaunchService urlLaunchService;
 
-    var friendsClient = FriendsClient();
-    friendsClient.database;
-    var friendsContext = FriendsContext(friendsClient);
+  final FriendTabFlow friendTabFlow;
+  final GetInTouchFlow getInTouchFlow;
+  final SettingsTabFlow settingsFlow;
 
-    var friendTabFlow = FriendTabFlow(appNav, friendsContext);
-    var getInTouchFlow = GetInTouchFlow(friendsContext, urlLaunchService);
-    var settingsFlow = SettingsTabFlow(notificationService);
-    return new AppFlow._(appNav, notificationService, urlLaunchService, friendTabFlow,
-      getInTouchFlow, settingsFlow, friendsClient, friendsContext);
-  }
+  final FriendsClient friendsClient;
+  final FriendsContext friendsContext;
 
   AppView start() {
     appNav.addRoute('/friends', 0);
     appNav.addRoute('/get_in_touch', 1);
     appNav.addRoute('/settings', 2);
 
-    return AppView([friendTabFlow, getInTouchFlow, settingsFlow], appNav);
+    return AppView(<TopLevelFlow>[friendTabFlow, getInTouchFlow, settingsFlow], appNav);
   }
 }
