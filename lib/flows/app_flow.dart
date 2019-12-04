@@ -6,14 +6,14 @@ import '../services/notification_service.dart';
 
 import 'friend_tab_flow.dart';
 import 'get_in_touch_flow.dart';
-import 'settings_flow.dart';
+import 'settings_tab_flow.dart';
 
 class AppFlow {
   final AppNav appNav;
   final NotificationService notificationService;
   final FriendTabFlow friendTabFlow;
   final GetInTouchFlow getInTouchFlow;
-  final SettingsFlow settingsFlow;
+  final SettingsTabFlow settingsFlow;
 
   final FriendsClient friendsClient;
   final FriendsContext friendsContext;
@@ -39,7 +39,7 @@ class AppFlow {
 
     var friendTabFlow = FriendTabFlow(appNav, friendsContext);
     var getInTouchFlow = GetInTouchFlow(friendsContext);
-    var settingsFlow = SettingsFlow(notificationService);
+    var settingsFlow = SettingsTabFlow(notificationService);
     return new AppFlow._(appNav, notificationService, friendTabFlow,
         getInTouchFlow, settingsFlow, friendsClient, friendsContext);
   }

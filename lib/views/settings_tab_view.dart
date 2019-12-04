@@ -1,34 +1,32 @@
 import 'package:flutter/material.dart';
-import '../views/nav_view.dart'; // how to get rid of this
-import '../services/notification_service.dart';
 
-class SettingsFlow implements TopLevelFlow, TopLevelNavViews {
-  final NotificationService notificationService;
+class SettingsTabView extends StatelessWidget {
+  final Function onShowTestNotification;
+  final Function onScheduleNotification;
+  final Function onScheduleNotificationEveryMinute;
+  final Function onScheduleNotificationDaily;
+  final Future<List<Notification>> getScheduledNotifications; 
 
-  SettingsFlow(this.notificationService);
+  SettingsTabView(this.onShowTestNotification, this.onScheduleNotification, this.onScheduleNotificationEveryMinute, this.onScheduleNotificationDaily, this.getScheduledNotifications);
 
   @override
-  AppBar getAppBar() {
-    return AppBar(title: Text("Settings"));
-  }
-
-  Widget start() {
+  Widget build(BuildContext context) {
     return Column(children: <Widget>[
       Text("Settings flow", textScaleFactor: 3.0),
       RaisedButton(
-        onPressed: notificationService.showNotificationWithDefaultSound,
+        onPressed: onShowTestNotification,
         child: Text('Test notification'),
       ),
       RaisedButton(
-        onPressed: notificationService.scheduleNotification,
+        onPressed: onScheduleNotification,
         child: Text('Schedule notification'),
       ),
       RaisedButton(
-        onPressed: notificationService.scheduleNotificationEveryMin,
+        onPressed: onScheduleNotificationEveryMinute,
         child: Text('Schedule notification every minute'),
       ),
       RaisedButton(
-        onPressed: notificationService.scheduleNotificationDaily,
+        onPressed: onScheduleNotificationDaily,
         child: Text('Schedule daily notification'),
       ),
       displayScheduledNotifications()
@@ -47,7 +45,7 @@ class SettingsFlow implements TopLevelFlow, TopLevelNavViews {
           shrinkWrap: true,
           itemCount: (resultsSnapshot.data == null ? 0 : resultsSnapshot.data.length),
           itemBuilder: (context, index) {
-            PendingNotification notification = resultsSnapshot.data[index];
+            Notification notification = resultsSnapshot.data[index];
             return Container(
                 margin: const EdgeInsets.all(20.0),
                 child: Column(
@@ -63,21 +61,16 @@ class SettingsFlow implements TopLevelFlow, TopLevelNavViews {
           },
         );
       },
-      future: notificationService.getScheduledNotifications(),
+      future: getScheduledNotifications,
     );
   }
+}
 
-  @override
-  BottomNavigationBarItem getNavItem() {
-    return BottomNavigationBarItem(
-        icon: Icon(Icons.settings), title: Text('Settings'));
-  }
+class Notification {
+  final int id;
+  final String title;
+  final String body;
+  final String payload;
 
-  @override
-  TopLevelNavViews getTopLevelNavViews() {
-    return this;
-  }
-
-  @override
-  Widget get widget => start();
+  const Notification(this.id, this.title, this.body, this.payload);
 }
