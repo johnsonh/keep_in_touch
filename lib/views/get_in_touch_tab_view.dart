@@ -32,7 +32,7 @@ class GetInTouchTabView extends StatelessWidget {
           return Container();
         }
 
-        if (friendsSnapshot.data == null) {
+        if (friendsSnapshot.data == null || friendsSnapshot.data.isEmpty) {
           return Container();
         }
         return ContactFriendView(

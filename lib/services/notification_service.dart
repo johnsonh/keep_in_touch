@@ -41,7 +41,7 @@ class NotificationService {
   }
 
   Future<void> scheduleNotification() async {
-    final DateTime scheduledNotificationDateTime = DateTime.now().add(Duration(seconds: 3));
+    final DateTime scheduledNotificationDateTime = DateTime.now().add(const Duration(seconds: 3));
     await flutterLocalNotificationsPlugin.schedule(
         0,
         'scheduled title',

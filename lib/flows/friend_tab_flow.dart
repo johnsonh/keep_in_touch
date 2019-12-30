@@ -1,3 +1,5 @@
+import 'package:keep_in_touch/views/add_friend_view.dart';
+
 import '../domain/friend.dart';
 import '../domain/friends_context.dart';
 import '../services/url_navigator.dart'; // URLManager we out here
@@ -15,14 +17,7 @@ class FriendTabFlow implements TopLevelFlow {
 
     final FriendsTabView friendsTabView = FriendsTabView(onPressFAB);
 
-    // When there's a UI to fill out a new friend, this will be different
-    final Function onTapAdd = () async {
-      final Friend friend = Friend('Elephant', null, null);
-      await friendsContext.saveFriend(friend);
-      friendsTabView.addFriend(friend);
-      print('add a friend');
-    };
-
+    // this can be buggy, would be fixed with BLoC
     final FriendsTabView Function() start = () {
       friendsContext.getAllFriends().then((List<Friend> friends) {
         friends.forEach(friendsTabView.addFriend);
@@ -31,23 +26,38 @@ class FriendTabFlow implements TopLevelFlow {
       return friendsTabView;
     };
 
+    final Function onTapSave = () async {
+      final Friend friend = Friend('Elephant', null, null);
+      await friendsContext.saveFriend(friend);
+      friendsTabView.addFriend(friend);
+      print('add a friend');
+    };
+
+    final AddFriendView addFriendView = AddFriendView(onTapSave);
+
+    final Function onTapAdd = () async {
+      navigator.navigateTo('/friends/add');
+    };
+
     final FriendsTabNavViewsProvider friendsTopTabViewsProvider =
         FriendsTabNavViewsProvider(friendsTabView, onTapAdd, start);
 
     return FriendTabFlow._(
-        navigator, friendsContext, friendsTabView, friendsTopTabViewsProvider);
+        navigator, friendsContext, friendsTabView, addFriendView, friendsTopTabViewsProvider);
   }
 
-  FriendTabFlow._(this.navigator, this.friendsContext, this.friendsTabView,
-    this.friendsTopTabViewProvider);
+  FriendTabFlow._(this._navigator, this._friendsContext, this._friendsTabView, this._addFriendView,
+    this._friendsTopTabViewProvider);
 
-  final URLNavigator navigator;
-  final FriendsContext friendsContext;
-  final FriendsTabView friendsTabView;
-  final FriendsTabNavViewsProvider friendsTopTabViewProvider;
+  final URLNavigator _navigator;
+  final FriendsContext _friendsContext;
+  
+  final FriendsTabView _friendsTabView;
+  final AddFriendView _addFriendView; 
+  final FriendsTabNavViewsProvider _friendsTopTabViewProvider;
 
   @override
   TopLevelNavViewProvider provideTopLevelNavViews() {
-    return friendsTopTabViewProvider;
+    return _friendsTopTabViewProvider;
   }
 }
